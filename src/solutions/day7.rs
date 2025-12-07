@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::solutions::sol_trait::Solution;
 pub struct Day7;
 

@@ -1,4 +1,4 @@
-use std::{arch::naked_asm, fmt::format};
+#![allow(dead_code)]
 
 pub fn get_answer1() -> i32 {
     let input = get_input();
