@@ -1,5 +1,4 @@
 use crate::solutions::sol_trait::Solution;
-use std::{collections::HashSet, vec};
 pub struct Day7;
 
 impl Solution for Day7{
