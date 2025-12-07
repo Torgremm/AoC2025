@@ -15,8 +15,11 @@ fn main() {
     // let day4_1 = solutions::day4::Day4::get_answer1();
     // let day4_2 = solutions::day4::Day4::get_answer2();
     
-    let day5_1 = solutions::day5::Day5::get_answer1();
-    let day5_2 = solutions::day5::Day5::get_answer2();
+    // let day5_1 = solutions::day5::Day5::get_answer1();
+    // let day5_2 = solutions::day5::Day5::get_answer2();
+
+    let day7_1 = solutions::day7::Day7::get_answer1();
+    let day7_2 = solutions::day7::Day7::get_answer2();
 
     // println!("Day 1:");
     // println!("\tPart 1: {day1_1}");
@@ -34,7 +37,11 @@ fn main() {
     // println!("\tPart 1: {day4_1}");
     // println!("\tPart 2: {day4_2}");
 
-    println!("Day 5:");
-    println!("\tPart 1: {day5_1}");
-    println!("\tPart 2: {day5_2}");
+    // println!("Day 5:");
+    // println!("\tPart 1: {day5_1}");
+    // println!("\tPart 2: {day5_2}");
+
+    println!("Day 7:");
+    println!("\tPart 1: {day7_1}");
+    println!("\tPart 2: {day7_2}");
 }
