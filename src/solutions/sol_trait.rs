@@ -17,3 +17,21 @@ pub trait Solution {
 
     fn get_example_input() -> String;
 }
+#[macro_export]
+macro_rules! solve_with_time {
+    ($part:literal, $expected:expr) => {{
+        let start = std::time::Instant::now();
+
+        let solve = match $part {
+            1 => Self::solve1,
+            2 => Self::solve2,
+            _ => panic!("stupid worm"),
+        };
+
+        assert_eq!(solve(Self::get_example_input().as_str()), $expected);
+
+        let result = solve(Self::get_input().as_str());
+        println!("Part {} solved in {:?}", $part, start.elapsed());
+        result
+    }};
+}
