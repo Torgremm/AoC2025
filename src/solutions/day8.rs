@@ -2,6 +2,8 @@
 
 use crate::solutions::sol_trait::Solution;
 use std::time::Instant;
+use std::collections::BinaryHeap;
+use std::cmp::Reverse;
 
 pub struct Day8;
 
@@ -71,20 +73,24 @@ impl Solution for Day8{
         }).collect();
 
         let length = data.len();
-        let mut edges: Vec<(i64,usize,usize)> = Vec::new();
+        let mut heap: BinaryHeap<(i64, usize, usize)> = BinaryHeap::new();
 
         for i in 0..length {
             for j in (i+1)..length {
                 let dist = get_distance(&data[i], &data[j]);
-                edges.push((dist, i, j));
+                let edge = (dist, i, j);
+                if heap.len() < 1000 {
+                    heap.push(edge);
+                } else if dist < heap.peek().unwrap().0{
+                    heap.pop();
+                    heap.push(edge);
+                }
             }
         }
 
-        edges.sort_by(|a, b| a.0.cmp(&b.0));
-
         let mut connections: Vec<Vec<usize>> = Vec::new();
-        for i in 0..1000 {
-            let (_, a, b) = edges[i];
+        for i in 0..heap.len() {
+            let (_, a, b) = heap.pop().unwrap();
             connect(a, b, &mut connections);
         }
 
@@ -101,23 +107,22 @@ impl Solution for Day8{
         }).collect();
 
         let length = data.len();
-        let mut edges: Vec<(i64,usize,usize)> = Vec::new();
+        let mut heap: BinaryHeap<Reverse<(i64, usize, usize)>> = BinaryHeap::new();
 
         for i in 0..length {
             for j in (i+1)..length {
                 let dist = get_distance(&data[i], &data[j]);
-                edges.push((dist, i, j));
+                let edge = (dist, i, j);
+                heap.push(Reverse(edge));
             }
         }
 
-        edges.sort_by(|a, b| a.0.cmp(&b.0));
-
         let mut connections: Vec<Vec<usize>> = Vec::new();
-        
-        for i in 0..edges.len() {
-            let (_, a, b) = edges[i];
+            
+        while let Some(Reverse((_, a, b))) = heap.pop() {
             connect(a, b, &mut connections);
-            if connections[0].len() == length {
+            let max_size = connections.iter().map(|g| g.len()).max().unwrap();
+            if max_size == length {
                 return data[a].0 * data[b].0;
             }
         }
