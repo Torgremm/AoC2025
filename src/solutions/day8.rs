@@ -89,7 +89,7 @@ impl Solution for Day8{
         }
 
         let mut connections: Vec<Vec<usize>> = Vec::new();
-        for i in 0..heap.len() {
+        for _ in 0..heap.len() {
             let (_, a, b) = heap.pop().unwrap();
             connect(a, b, &mut connections);
         }

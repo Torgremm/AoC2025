@@ -6,3 +6,4 @@ edition = "2024"
 [dependencies]
 paste = "1.0.15"
 regex = "1.12.2"
+bevy = "0.11"
