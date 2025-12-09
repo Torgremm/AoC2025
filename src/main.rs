@@ -15,5 +15,5 @@ macro_rules! run_day {
 }
 
 fn main() {
-    run_day!(8);
+    run_day!(9);
 }
