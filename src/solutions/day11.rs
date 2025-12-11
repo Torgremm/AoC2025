@@ -20,14 +20,15 @@ impl Solution for Day11{
 
     fn solve1(input: &str) -> i64 {
         let data = parse_data(input);
-        get_routes("you", "out", &data)
+        let mut memo = HashMap::new();
+
+        get_routes("you", "out", &data, &mut memo)
     }
 
     fn solve2(input: &str) -> i64 {
         let data = parse_data(input);
-        let paths = get_routes2("svr", "out", &data);
-
-        paths
+        let mut memo = HashMap::new();
+        get_routes2("svr", "out", &data, &mut memo, false, false)
     }
 
     fn get_example_input() -> String {
@@ -74,53 +75,51 @@ ggg: out
 hhh: out".to_string()
 }
 
-fn get_routes(start: &str, end: &str, data: &HashMap<&str, Vec<&str>>) -> i64 {
-    let mut queue: VecDeque<&str> = VecDeque::new();
-    let mut paths = 0;
-
-    queue.push_back(start);
-
-    while let Some(current) = queue.pop_front() {
-        if current == end {
-            paths += 1;
-        }
-
-        if let Some(neighbors) = data.get(current) {
-            for &neighbor in neighbors {
-                queue.push_back(neighbor);
-            }
+fn get_routes(start: &str, end: &str, data: &HashMap<&str, Vec<&str>>, memo: &mut HashMap<String, i64>) -> i64 {
+    
+    if start == end {
+        return 1;
+    }
+    
+    let mut total = 0;
+    
+    if let Some(neighbors) = data.get(start) {
+        for &neighbor in neighbors {
+            total += get_routes(neighbor, end, data, memo);
         }
     }
 
-    paths
+    total
 }
 
-fn get_routes2(start: &str, end: &str, data: &HashMap<&str, Vec<&str>>) -> i64 {
-    let mut queue: VecDeque<(&str, bool, bool)> = VecDeque::new();
-    let mut paths = 0;
+fn get_routes2(
+    start: &str, 
+    end: &str, 
+    data: &HashMap<&str, Vec<&str>>,
+    memo: &mut HashMap<(String, bool, bool), i64>,
+    dac_seen: bool,
+    fft_seen: bool,
+                    ) -> i64 {
+    let dac = dac_seen || start == "dac";
+    let fft = fft_seen || start == "fft";
 
-    queue.push_back((start, false, false));
+    let key = (start.to_string(), dac, fft);
+    if let Some(&cached) = memo.get(&key) {
+        return cached;
+    }
 
-    while let Some(current) = queue.pop_front() {
-        let mut dac_seen = current.1;
-        let mut fft_seen = current.2;
-        
-        if current.0 == end  && dac_seen && fft_seen {
-            paths += 1;
-        }
-        if current.0 == "dac" {
-            dac_seen = true;
-        }
-        if current.0 == "fft" {
-            fft_seen = true;
-        }
+    if start == end {
+        return (dac && fft) as i64;
+    }
 
-        if let Some(neighbors) = data.get(current.0) {
-            for &neighbor in neighbors {
-                queue.push_back((neighbor, dac_seen, fft_seen));
-            }
+    let mut total = 0;
+
+    if let Some(neighbors) = data.get(start) {
+        for &n in neighbors {
+            total += get_routes2(n, end, data, memo, dac, fft);
         }
     }
 
-    paths
+    memo.insert(key, total);
+    total
 }
