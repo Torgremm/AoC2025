@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 use crate::solutions::sol_trait::Solution;
-use std::collections::{HashMap, VecDeque};
+use std::collections::HashMap;
 use std::time::Instant;
 pub struct Day11;
 

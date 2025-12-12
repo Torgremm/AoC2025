@@ -64,7 +64,7 @@ impl Present {
 
 impl Solution for Day12{
     fn get_answer1() -> i64 {
-        crate::solve_with_time!(1, 2)
+        crate::solve_with_time!(1, 0)
     }
 
     fn get_answer2() -> i64 {
@@ -72,11 +72,11 @@ impl Solution for Day12{
     }
 
     fn solve1(input: &str) -> i64 {
-        let data = parse_data(input);
+        let _data = parse_data(input);
         0
     }
 
-    fn solve2(input: &str) -> i64 {
+    fn solve2(_input: &str) -> i64 {
         0
     }
 
@@ -138,7 +138,8 @@ fn parse_presents(input: &str) -> Vec<Present> {
 
 fn parse_placements(input: &str) -> Vec<PresentPlacement> {
     let block = input.split("\n\n").last().unwrap();
-    block.lines().map(
+    block.lines().filter(|line| line.contains("x"))
+    .map(
         |line|{
             let mut v = line.split_whitespace();
             let mut parts = v.next().unwrap().trim_end_matches(':').split('x');
