@@ -1,7 +1,10 @@
 #![allow(dead_code)]
+use bevy::utils::petgraph::data;
+
 use crate::solutions::sol_trait::Solution;
 pub struct Day12;
 
+#[derive(Clone)]
 struct Present {
     id: usize,
     pattern: Vec<Vec<bool>>,
@@ -17,6 +20,12 @@ struct PresentPlacement {
 struct ProblemInstance {
     presents: Vec<Present>,
     placements: Vec<PresentPlacement>, 
+}
+
+impl PartialEq for Present {
+    fn eq(&self, other: &Self) -> bool {
+        self.pattern == other.pattern
+    }
 }
 
 
@@ -44,6 +53,23 @@ impl Present {
         self.pattern.iter().flatten().filter(|&&b| b).count()
     }
 
+    fn flip(&self) -> Present {
+        let size_y = self.pattern.len();
+        let size_x = self.pattern[0].len();
+        let mut new_pattern = vec![vec![false; size_x]; size_y];
+
+        for y in 0..size_y {
+            for x in 0..size_x {
+                new_pattern[y][size_x - x - 1] = self.pattern[y][x];
+            }
+        }
+
+        Present {
+            id: self.id,
+            pattern: new_pattern,
+        }
+    }
+
     fn rotate(&self) -> Present {
         let size_y = self.pattern.len();
         let size_x = self.pattern[0].len();
@@ -51,20 +77,20 @@ impl Present {
 
         for y in 0..size_y {
             for x in 0..size_x {
-                new_pattern[x][size_y - y - 1] = self.pattern[y][x];
+                new_pattern[x][size_y - 1 - y] = self.pattern[y][x];
             }
         }
 
         Present {
             id: self.id,
-            pattern: new_pattern
+            pattern: new_pattern,
         }
     }
 }
 
 impl Solution for Day12{
     fn get_answer1() -> i64 {
-        crate::solve_with_time!(1, 0)
+        crate::solve_with_time!(1, 1)
     }
 
     fn get_answer2() -> i64 {
@@ -72,8 +98,15 @@ impl Solution for Day12{
     }
 
     fn solve1(input: &str) -> i64 {
-        let _data = parse_data(input);
-        0
+        let data = parse_data(input);
+        let mut success_count = 0;
+        for placement in data.placements {
+            let area = placement.x * placement.y;
+            if area >= placement.present_ids.iter().sum::<usize>() * 9 {
+                success_count += 1;
+            }
+        }
+        success_count
     }
 
     fn solve2(_input: &str) -> i64 {
@@ -127,13 +160,32 @@ fn parse_data(input: &str) -> ProblemInstance {
 }
 
 fn parse_presents(input: &str) -> Vec<Present> {
-    input.split("\n\n").filter_map(
-        |block|{
-            let id = block.lines().next().unwrap().trim_end_matches(':').parse::<usize>().ok()?;
-            let pattern = block.lines().skip(1).collect::<Vec<&str>>();
-            Some(Present::new(pattern,id))
+    let mut presents = Vec::new();
+
+    let blocks: Vec<String> = input
+        .split(|c| c == '\n' || c == '\r') 
+        .collect::<Vec<_>>()
+        .split(|line| line.trim().is_empty()) 
+        .filter(|block| !block.is_empty())   
+        .map(|block| block.join("\n"))       
+        .collect::<Vec<String>>();
+
+    for block in blocks {
+        let mut lines = block.lines();
+        if let Some(first_line) = lines.next() {
+            let id = first_line.trim_end_matches(':').parse::<usize>().ok();
+            if let Some(id) = id {
+                let pattern = lines.collect::<Vec<&str>>();
+
+                if pattern.is_empty() {
+                    continue;
+                }
+                presents.push(Present::new(pattern, id));
+            }
         }
-    ).collect::<Vec<Present>>()
+    }
+
+    presents
 }
 
 fn parse_placements(input: &str) -> Vec<PresentPlacement> {
@@ -156,3 +208,4 @@ fn parse_placements(input: &str) -> Vec<PresentPlacement> {
         }
     ).collect::<Vec<PresentPlacement>>()
 }
+
