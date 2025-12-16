@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::time::Instant;
 pub struct Day11;
 
-impl Solution for Day11{
+impl Solution for Day11 {
     fn get_answer1() -> i64 {
         crate::solve_with_time!(1, 5)
     }
@@ -41,21 +41,22 @@ eee: out
 fff: out
 ggg: out
 hhh: ccc fff iii
-iii: out".to_string()
+iii: out"
+            .to_string()
     }
-
 }
 
 fn parse_data(input: &str) -> HashMap<&str, Vec<&str>> {
-    let data = input.lines().map(|line|
-        {
+    let data = input
+        .lines()
+        .map(|line| {
             let line_data = line.split(' ').collect::<Vec<&str>>();
             let server = line_data[0].trim_end_matches(':');
             let connections = line_data.iter().skip(1).map(|s| *s).collect::<Vec<&str>>();
 
             (server, connections)
-        }
-    ).collect::<HashMap<&str, Vec<&str>>>();
+        })
+        .collect::<HashMap<&str, Vec<&str>>>();
     data
 }
 
@@ -72,34 +73,44 @@ eee: dac
 dac: fff
 fff: ggg hhh
 ggg: out
-hhh: out".to_string()
+hhh: out"
+        .to_string()
 }
 
-fn get_routes(start: &str, end: &str, data: &HashMap<&str, Vec<&str>>, memo: &mut HashMap<String, i64>) -> i64 {
-    
+fn get_routes(
+    start: &str,
+    end: &str,
+    data: &HashMap<&str, Vec<&str>>,
+    memo: &mut HashMap<String, i64>,
+) -> i64 {
+    if let Some(&cached) = memo.get(start) {
+        return cached;
+    }
+
     if start == end {
         return 1;
     }
-    
+
     let mut total = 0;
-    
+
     if let Some(neighbors) = data.get(start) {
         for &neighbor in neighbors {
             total += get_routes(neighbor, end, data, memo);
         }
     }
 
+    memo.insert(start.to_string(), total);
     total
 }
 
 fn get_routes2(
-    start: &str, 
-    end: &str, 
+    start: &str,
+    end: &str,
     data: &HashMap<&str, Vec<&str>>,
     memo: &mut HashMap<(String, bool, bool), i64>,
     dac_seen: bool,
     fft_seen: bool,
-                    ) -> i64 {
+) -> i64 {
     let dac = dac_seen || start == "dac";
     let fft = fft_seen || start == "fft";
 

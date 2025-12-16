@@ -23,7 +23,7 @@ pub fn cepha_operation(input: Vec<&str>, is_product: bool) -> i64 {
         }
 
         if any_digit {
-            let num = number.parse::<i64>().unwrap(); 
+            let num = number.parse::<i64>().unwrap();
             results.push(num);
         }
     }
@@ -36,10 +36,7 @@ pub fn cepha_operation(input: Vec<&str>, is_product: bool) -> i64 {
 }
 
 fn empty_columns(input: &str) -> String {
-    let mut lines: Vec<Vec<char>> = input
-        .lines()
-        .map(|line| line.chars().collect())
-        .collect();
+    let mut lines: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
     let rows = lines.len();
     let cols = lines.iter().map(|l| l.len()).max().unwrap();
@@ -71,9 +68,7 @@ fn empty_columns(input: &str) -> String {
         .join("\n")
 }
 
-
-
-impl Solution for Day6{
+impl Solution for Day6 {
     fn get_answer1() -> i64 {
         let start = Instant::now();
         assert_eq!(Self::solve1(&Self::get_example_input()), 4277556);
@@ -91,27 +86,26 @@ impl Solution for Day6{
     }
 
     fn solve1(input: &str) -> i64 {
-        let sheet = input.lines()
-            .map(|line| {
-                line
-                .split_whitespace()
-                .collect::<Vec<&str>>()
-            })
+        let sheet = input
+            .lines()
+            .map(|line| line.split_whitespace().collect::<Vec<&str>>())
             .collect::<Vec<Vec<&str>>>();
 
         let cols = sheet[0].len();
         let rows = sheet.len();
 
         let mut sum: i64 = 0;
-        
+
         for col in 0..cols {
-            let value: i64 = match sheet[rows-1][col] {
-                "+" => {
-                    sheet.iter().map(|row| row[col].parse::<i64>().unwrap_or(0)).sum()
-                },
-                "*" => {
-                    sheet.iter().map(|row| row[col].parse::<i64>().unwrap_or(1)).product()
-                },
+            let value: i64 = match sheet[rows - 1][col] {
+                "+" => sheet
+                    .iter()
+                    .map(|row| row[col].parse::<i64>().unwrap_or(0))
+                    .sum(),
+                "*" => sheet
+                    .iter()
+                    .map(|row| row[col].parse::<i64>().unwrap_or(1))
+                    .product(),
                 _ => panic!("no operation found in column {col}"),
             };
             sum += value;
@@ -121,30 +115,28 @@ impl Solution for Day6{
     }
 
     fn solve2(input: &str) -> i64 {
-
         let improved_input = empty_columns(input);
 
-        let sheet = improved_input.lines()
-            .map(|line| {
-                line
-                .split(',')
-                .collect::<Vec<&str>>()
-            })
+        let sheet = improved_input
+            .lines()
+            .map(|line| line.split(',').collect::<Vec<&str>>())
             .collect::<Vec<Vec<&str>>>();
 
         let cols = sheet[0].len();
         let rows = sheet.len();
 
         let mut sum: i64 = 0;
-        
+
         for col in 0..cols {
-            let value: i64 = match sheet[rows-1][col].trim() {
-                "+" => {
-                    cepha_operation(sheet[0..rows-1].iter().map(|row| row[col]).collect(), false)
-                },
-                "*" => {
-                    cepha_operation(sheet[0..rows-1].iter().map(|row| row[col]).collect(), true)
-                },
+            let value: i64 = match sheet[rows - 1][col].trim() {
+                "+" => cepha_operation(
+                    sheet[0..rows - 1].iter().map(|row| row[col]).collect(),
+                    false,
+                ),
+                "*" => cepha_operation(
+                    sheet[0..rows - 1].iter().map(|row| row[col]).collect(),
+                    true,
+                ),
                 _ => continue,
             };
             sum += value;
@@ -157,7 +149,8 @@ impl Solution for Day6{
         "123 328  51 64 
  45 64  387 23 
   6 98  215 314
-*   +   *   +  ".to_string()
+*   +   *   +  "
+            .to_string()
     }
 
     fn get_input() -> String {

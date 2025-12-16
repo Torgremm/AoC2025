@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 
 use crate::solutions::sol_trait::Solution;
-use std::time::Instant;
-use std::collections::BinaryHeap;
 use std::cmp::Reverse;
+use std::collections::BinaryHeap;
+use std::time::Instant;
 
 pub struct Day8;
 
@@ -45,11 +45,9 @@ pub fn connect(a: usize, b: usize, connections: &mut Vec<Vec<usize>>) {
             connections.push(vec![a, b]);
         }
     }
-
 }
 
-
-impl Solution for Day8{
+impl Solution for Day8 {
     fn get_answer1() -> i64 {
         let start = Instant::now();
         //assert_eq!(Self::solve1(&Self::get_example_input()), 40);
@@ -67,21 +65,24 @@ impl Solution for Day8{
     }
 
     fn solve1(input: &str) -> i64 {
-        let data: Vec<(i64, i64, i64)> = input.lines().map(|line| {
-            let nums: Vec<i64> = line.split(',').map(|s| s.parse().unwrap()).collect();
-            (nums[0], nums[1], nums[2])
-        }).collect();
+        let data: Vec<(i64, i64, i64)> = input
+            .lines()
+            .map(|line| {
+                let nums: Vec<i64> = line.split(',').map(|s| s.parse().unwrap()).collect();
+                (nums[0], nums[1], nums[2])
+            })
+            .collect();
 
         let length = data.len();
         let mut heap: BinaryHeap<(i64, usize, usize)> = BinaryHeap::new();
 
         for i in 0..length {
-            for j in (i+1)..length {
+            for j in (i + 1)..length {
                 let dist = get_distance(&data[i], &data[j]);
                 let edge = (dist, i, j);
                 if heap.len() < 1000 {
                     heap.push(edge);
-                } else if dist < heap.peek().unwrap().0{
+                } else if dist < heap.peek().unwrap().0 {
                     heap.pop();
                     heap.push(edge);
                 }
@@ -97,20 +98,22 @@ impl Solution for Day8{
         let mut count: Vec<usize> = connections.iter().map(|d| d.len()).collect();
         count.sort_by(|a, b| b.cmp(a));
         (count[0] * count[1] * count[2]) as i64
-
     }
 
     fn solve2(input: &str) -> i64 {
-        let data: Vec<(i64, i64, i64)> = input.lines().map(|line| {
-            let nums: Vec<i64> = line.split(',').map(|s| s.parse().unwrap()).collect();
-            (nums[0], nums[1], nums[2])
-        }).collect();
+        let data: Vec<(i64, i64, i64)> = input
+            .lines()
+            .map(|line| {
+                let nums: Vec<i64> = line.split(',').map(|s| s.parse().unwrap()).collect();
+                (nums[0], nums[1], nums[2])
+            })
+            .collect();
 
         let length = data.len();
         let mut heap: BinaryHeap<Reverse<(i64, usize, usize)>> = BinaryHeap::new();
 
         for i in 0..length {
-            for j in (i+1)..length {
+            for j in (i + 1)..length {
                 let dist = get_distance(&data[i], &data[j]);
                 let edge = (dist, i, j);
                 heap.push(Reverse(edge));
@@ -118,7 +121,7 @@ impl Solution for Day8{
         }
 
         let mut connections: Vec<Vec<usize>> = Vec::new();
-            
+
         while let Some(Reverse((_, a, b))) = heap.pop() {
             connect(a, b, &mut connections);
             let max_size = connections.iter().map(|g| g.len()).max().unwrap();
@@ -150,7 +153,7 @@ impl Solution for Day8{
 862,61,35
 984,92,344
 425,690,689
-".to_string()
+"
+        .to_string()
     }
-    
 }

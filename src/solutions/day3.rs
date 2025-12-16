@@ -5,14 +5,12 @@ pub fn get_answer1() -> i32 {
     let mut jolt_total: i32 = 0;
 
     for bank in input.lines() {
-
         let mut maxdigit = 0;
         let mut seconddigit = 0;
 
         let mut iter = bank.chars().peekable();
 
-        while let Some(c) = iter.next(){
-
+        while let Some(c) = iter.next() {
             let d = match c.to_digit(10) {
                 Some(v) => v,
                 None => continue,
@@ -27,7 +25,6 @@ pub fn get_answer1() -> i32 {
             if d > seconddigit {
                 seconddigit = c.to_digit(10).unwrap();
             }
-
         }
         let max: i32 = format!("{}{}", maxdigit, seconddigit).parse().unwrap();
         jolt_total += max;
@@ -41,10 +38,9 @@ pub fn get_answer2() -> i64 {
 
     for bank in input.lines() {
         let length = bank.chars().count();
-        let mut jolt_array = [0,0,0,0,0,0,0,0,0,0,0,0];
-        
-        'bankloop: for n in 0..length {
+        let mut jolt_array = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
+        'bankloop: for n in 0..length {
             let d = match bank.chars().nth(n).unwrap().to_digit(10) {
                 Some(v) => v,
                 None => continue,
@@ -53,7 +49,7 @@ pub fn get_answer2() -> i64 {
             for m in 0..12 {
                 if d > jolt_array[m] && length - n >= 12 - m {
                     jolt_array[m] = d;
-                    for k in m+1..12 {
+                    for k in m + 1..12 {
                         jolt_array[k] = 0;
                     }
                     continue 'bankloop;
@@ -270,10 +266,10 @@ fn get_input() -> String {
 ".to_string()
 }
 
-fn get_example_input() -> String{
+fn get_example_input() -> String {
     "987654321111111
     811111111111119
     234234234234278
-    818181911112111".to_string()
+    818181911112111"
+        .to_string()
 }
-

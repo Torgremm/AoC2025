@@ -1,4 +1,3 @@
-
 pub trait Solution {
     fn get_answer1() -> i64;
     fn get_answer2() -> i64;

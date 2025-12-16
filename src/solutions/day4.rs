@@ -4,50 +4,49 @@ use crate::solutions::sol_trait::Solution;
 pub struct Day4;
 
 pub fn solve2_helper(grid: &mut Vec<Vec<char>>) -> bool {
-        let row_count = grid.len();
-        let col_count = grid[0].len();
+    let row_count = grid.len();
+    let col_count = grid[0].len();
 
-        for row in 0..row_count{
-            for col in 0..col_count {
-                let current_char = grid[row][col];
-                if current_char != '@' {
-                    continue;
-                }
+    for row in 0..row_count {
+        for col in 0..col_count {
+            let current_char = grid[row][col];
+            if current_char != '@' {
+                continue;
+            }
 
-                let mut count = 0;
-                for d_row in -1..=1 {
-                    for d_col in -1..=1 {
-                        if d_row == 0 && d_col == 0 {
-                            continue;
-                        }
-                    
-                        let peek_row_i = row as isize + d_row;
-                        let peek_col_i = col as isize + d_col;
-                    
-                        if peek_row_i < 0 || peek_row_i >= row_count as isize {
-                            continue;
-                        }
-                        if peek_col_i < 0 || peek_col_i >= col_count as isize {
-                            continue;
-                        }
-                    
-                        let peek_row = peek_row_i as usize;
-                        let peek_col = peek_col_i as usize;
-                    
-                        let peek_char = grid[peek_row][peek_col];
-                        if peek_char == '@' {
-                            count += 1;
-                        }
+            let mut count = 0;
+            for d_row in -1..=1 {
+                for d_col in -1..=1 {
+                    if d_row == 0 && d_col == 0 {
+                        continue;
+                    }
+
+                    let peek_row_i = row as isize + d_row;
+                    let peek_col_i = col as isize + d_col;
+
+                    if peek_row_i < 0 || peek_row_i >= row_count as isize {
+                        continue;
+                    }
+                    if peek_col_i < 0 || peek_col_i >= col_count as isize {
+                        continue;
+                    }
+
+                    let peek_row = peek_row_i as usize;
+                    let peek_col = peek_col_i as usize;
+
+                    let peek_char = grid[peek_row][peek_col];
+                    if peek_char == '@' {
+                        count += 1;
                     }
                 }
-                if count < 4 {
-                    grid[row][col] = '.';
-                    return true;
-                }
+            }
+            if count < 4 {
+                grid[row][col] = '.';
+                return true;
             }
         }
-        false
-
+    }
+    false
 }
 
 impl Solution for Day4 {
@@ -62,17 +61,14 @@ impl Solution for Day4 {
     }
 
     fn solve1(input: &str) -> i64 {
-        let grid: Vec<Vec<char>> = input
-            .lines()
-            .map(|l| l.chars().collect())
-            .collect();
+        let grid: Vec<Vec<char>> = input.lines().map(|l| l.chars().collect()).collect();
 
         let row_count = grid.len();
         let col_count = grid[0].len();
 
         let mut free_count = 0;
 
-        for row in 0..row_count{
+        for row in 0..row_count {
             for col in 0..col_count {
                 let current_char = grid[row][col];
                 if current_char != '@' {
@@ -85,20 +81,20 @@ impl Solution for Day4 {
                         if d_row == 0 && d_col == 0 {
                             continue;
                         }
-                    
+
                         let peek_row_i = row as isize + d_row;
                         let peek_col_i = col as isize + d_col;
-                    
+
                         if peek_row_i < 0 || peek_row_i >= row_count as isize {
                             continue;
                         }
                         if peek_col_i < 0 || peek_col_i >= col_count as isize {
                             continue;
                         }
-                    
+
                         let peek_row = peek_row_i as usize;
                         let peek_col = peek_col_i as usize;
-                    
+
                         let peek_char = grid[peek_row][peek_col];
                         if peek_char == '@' {
                             count += 1;
@@ -108,17 +104,13 @@ impl Solution for Day4 {
                 if count < 4 {
                     free_count += 1;
                 }
-
             }
         }
         free_count
     }
 
     fn solve2(input: &str) -> i64 {
-        let mut grid: Vec<Vec<char>> = input
-            .lines()
-            .map(|l| l.chars().collect())
-            .collect();
+        let mut grid: Vec<Vec<char>> = input.lines().map(|l| l.chars().collect()).collect();
 
         let mut free_count = 0;
 
@@ -128,9 +120,9 @@ impl Solution for Day4 {
 
         free_count
     }
-    
+
     fn get_example_input() -> String {
-           "..@@.@@@@.
+        "..@@.@@@@.
 @@@.@.@.@@
 @@@@@.@.@@
 @.@@@@..@.
@@ -286,5 +278,4 @@ impl Solution for Day4 {
 @@@.@..@@@@@...@..@@@.@@@@.@@.@.@@@@@@..@@.@.@.@@.@@@@@@.@...@@@..@.@@@.@@@@@.@@@.@@@....@.@@.@.@@@@.@.@@@@.@@..@@@.@.@@.@@..@@@@@..@@@...@@
 ".to_string()
     }
-
 }

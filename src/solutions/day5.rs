@@ -3,16 +3,16 @@
 use crate::solutions::sol_trait::Solution;
 pub struct Day5;
 
-pub fn range_vec(fresh: &str) -> Vec<(i64,i64)> {
+pub fn range_vec(fresh: &str) -> Vec<(i64, i64)> {
     let lines = fresh.lines();
-    let mut range_map: Vec<(i64,i64)> = Vec::new();
+    let mut range_map: Vec<(i64, i64)> = Vec::new();
 
     for line in lines {
         let parts: Vec<&str> = line.split('-').collect();
         let start: i64 = parts[0].parse().unwrap();
         let end: i64 = parts[1].parse().unwrap();
 
-        range_map.push((start,end));
+        range_map.push((start, end));
     }
     range_map
 }
@@ -46,14 +46,15 @@ impl Solution for Day5 {
     }
 
     fn solve2(input: &str) -> i64 {
-       let parts = input.split("\n\n").collect::<Vec<&str>>();
+        let parts = input.split("\n\n").collect::<Vec<&str>>();
         let mut map = range_vec(parts[0]);
         map.sort_by(|a, b| a.0.cmp(&b.0));
 
-        let mut merged: Vec<(i64,i64)> = Vec::new();
+        let mut merged: Vec<(i64, i64)> = Vec::new();
 
         for range in map {
-            if let Some(last) = merged.last_mut() { //get last and make it mutable if edit needed
+            if let Some(last) = merged.last_mut() {
+                //get last and make it mutable if edit needed
                 if range.0 <= last.1 + 1 {
                     last.1 = last.1.max(range.1); //extend last range if overlap
                 } else {
@@ -63,7 +64,7 @@ impl Solution for Day5 {
                 merged.push(range); //first range
             }
         }
-        
+
         let mut fresh_count = 0;
 
         for merged_range in merged {
@@ -71,9 +72,9 @@ impl Solution for Day5 {
         }
         fresh_count
     }
-    
+
     fn get_example_input() -> String {
-           "3-5
+        "3-5
 10-14
 16-20
 12-18
@@ -84,7 +85,7 @@ impl Solution for Day5 {
 11
 17
 32"
-            .to_string()
+        .to_string()
     }
 
     fn get_input() -> String {
@@ -1273,7 +1274,7 @@ impl Solution for Day5 {
 552156651060434
 195803904631463
 364818531904503
-".to_string()
+"
+        .to_string()
     }
-
 }

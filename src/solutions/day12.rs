@@ -1,6 +1,4 @@
 #![allow(dead_code)]
-use bevy::utils::petgraph::data;
-
 use crate::solutions::sol_trait::Solution;
 pub struct Day12;
 
@@ -16,10 +14,9 @@ struct PresentPlacement {
     y: usize,
 }
 
-
 struct ProblemInstance {
     presents: Vec<Present>,
-    placements: Vec<PresentPlacement>, 
+    placements: Vec<PresentPlacement>,
 }
 
 impl PartialEq for Present {
@@ -27,7 +24,6 @@ impl PartialEq for Present {
         self.pattern == other.pattern
     }
 }
-
 
 impl Present {
     fn new(pattern: Vec<&str>, id: usize) -> Self {
@@ -45,7 +41,7 @@ impl Present {
 
         Present {
             id,
-            pattern: bool_pattern
+            pattern: bool_pattern,
         }
     }
 
@@ -88,7 +84,7 @@ impl Present {
     }
 }
 
-impl Solution for Day12{
+impl Solution for Day12 {
     fn get_answer1() -> i64 {
         crate::solve_with_time!(1, 1)
     }
@@ -146,11 +142,10 @@ impl Solution for Day12{
 
 4x4: 0 0 0 0 2 0
 12x5: 1 0 1 0 2 2
-12x5: 1 0 1 0 3 2".to_string()
+12x5: 1 0 1 0 3 2"
+            .to_string()
     }
-
 }
-
 
 fn parse_data(input: &str) -> ProblemInstance {
     ProblemInstance {
@@ -163,11 +158,11 @@ fn parse_presents(input: &str) -> Vec<Present> {
     let mut presents = Vec::new();
 
     let blocks: Vec<String> = input
-        .split(|c| c == '\n' || c == '\r') 
+        .split(|c| c == '\n' || c == '\r')
         .collect::<Vec<_>>()
-        .split(|line| line.trim().is_empty()) 
-        .filter(|block| !block.is_empty())   
-        .map(|block| block.join("\n"))       
+        .split(|line| line.trim().is_empty())
+        .filter(|block| !block.is_empty())
+        .map(|block| block.join("\n"))
         .collect::<Vec<String>>();
 
     for block in blocks {
@@ -190,22 +185,17 @@ fn parse_presents(input: &str) -> Vec<Present> {
 
 fn parse_placements(input: &str) -> Vec<PresentPlacement> {
     let block = input.split("\n\n").last().unwrap();
-    block.lines().filter(|line| line.contains("x"))
-    .map(
-        |line|{
+    block
+        .lines()
+        .filter(|line| line.contains("x"))
+        .map(|line| {
             let mut v = line.split_whitespace();
             let mut parts = v.next().unwrap().trim_end_matches(':').split('x');
             let x = parts.next().unwrap().parse::<usize>().unwrap();
             let y = parts.next().unwrap().parse::<usize>().unwrap();
             let present_ids = v.map(|d| d.parse().unwrap()).collect::<Vec<usize>>();
 
-            PresentPlacement {
-                present_ids,
-                x,
-                y,
-            }
-
-        }
-    ).collect::<Vec<PresentPlacement>>()
+            PresentPlacement { present_ids, x, y }
+        })
+        .collect::<Vec<PresentPlacement>>()
 }
-

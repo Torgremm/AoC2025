@@ -2,7 +2,7 @@
 use crate::solutions::sol_trait::Solution;
 pub struct Day7;
 
-impl Solution for Day7{
+impl Solution for Day7 {
     fn get_answer1() -> i64 {
         crate::solve_with_time!(1, 21)
     }
@@ -25,7 +25,7 @@ impl Solution for Day7{
         let mut split_count = 0;
 
         for row in 1..rows {
-            for col in 0..cols{
+            for col in 0..cols {
                 if current_row[col] {
                     if map[row][col] == '^' {
                         if col > 0 {
@@ -42,7 +42,6 @@ impl Solution for Day7{
             }
             current_row = next_row;
             next_row = vec![false; cols];
-
         }
         split_count
     }
@@ -59,7 +58,7 @@ impl Solution for Day7{
         current_row[start] = 1;
 
         for row in 1..rows {
-            for col in 0..cols{
+            for col in 0..cols {
                 let current_count = current_row[col];
 
                 if current_count > 0 {
@@ -77,9 +76,8 @@ impl Solution for Day7{
             }
             current_row = next_row;
             next_row = vec![0usize; cols];
-
         }
-        
+
         current_row.iter().sum::<usize>() as i64
     }
 
@@ -99,7 +97,7 @@ impl Solution for Day7{
 ..^...^.....^..
 ...............
 .^.^.^.^.^...^.
-...............".to_string()
+..............."
+            .to_string()
     }
-
 }

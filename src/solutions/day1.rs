@@ -5,18 +5,23 @@ pub fn get_answer1() -> i32 {
     let mut zero_count: i32 = 0;
 
     for instruction in input.lines() {
-        let amount: i32 = match instruction.chars().skip(1).collect::<String>().parse::<i32>() {
+        let amount: i32 = match instruction
+            .chars()
+            .skip(1)
+            .collect::<String>()
+            .parse::<i32>()
+        {
             Ok(n) => n,
             Err(_) => continue,
         };
 
-        position = match instruction.chars().next(){
+        position = match instruction.chars().next() {
             Some('R') => (position + amount).rem_euclid(100),
             Some('L') => (position - amount).rem_euclid(100),
             _ => continue,
         };
 
-        if position == 0{
+        if position == 0 {
             zero_count += 1;
         }
     }
@@ -27,13 +32,18 @@ pub fn get_answer2() -> i32 {
     let input = get_input();
     let mut position: i32 = 50;
     let mut zero_count: i32 = 0;
-    
+
     for instruction in input.lines() {
-        let amount: i32 = match instruction.chars().skip(1).collect::<String>().parse::<i32>() {
+        let amount: i32 = match instruction
+            .chars()
+            .skip(1)
+            .collect::<String>()
+            .parse::<i32>()
+        {
             Ok(n) => n,
             Err(_) => continue,
         };
-        
+
         match instruction.chars().next() {
             Some('R') => {
                 let first_zero = 100 - position;
@@ -41,7 +51,7 @@ pub fn get_answer2() -> i32 {
                     zero_count += 1 + (amount - first_zero) / 100;
                 }
                 position = (position + amount) % 100;
-            },
+            }
             Some('L') => {
                 if position == 0 {
                     zero_count += amount / 100;
@@ -51,7 +61,7 @@ pub fn get_answer2() -> i32 {
                     }
                 }
                 position = (position - amount).rem_euclid(100);
-            },
+            }
             _ => continue,
         };
     }
@@ -60,7 +70,7 @@ pub fn get_answer2() -> i32 {
 
 fn get_input() -> String {
     String::from(
-"R27
+        "R27
 R47
 R21
 L37
@@ -4392,5 +4402,6 @@ R35
 R6
 L49
 L41
-R43")
+R43",
+    )
 }
