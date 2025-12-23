@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 use crate::solutions::sol_trait::Solution;
-use std::collections::{HashMap, HashSet, VecDeque};
+use std::collections::{HashMap, VecDeque};
 
 pub struct Day10;
 
@@ -57,7 +57,7 @@ impl Solution for Day10 {
 
         for line in &data {
             let n_bits = line.joltage.len();
-            let patterns = build_patterns(&line.switches, n_bits, 25);
+            let patterns = build_patterns(&line.switches, n_bits, 8);
 
             let mut cache = HashMap::<Vec<u16>, Option<i64>>::new();
 
